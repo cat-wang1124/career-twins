@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Career Twin Finder · Built on Exa</title>
+<meta name="description" content="Find engineers whose careers look like yours. A small demo built on Exa's search API." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <div class="masthead__brand">
+        <span class="masthead__mark">✶</span>
+        <span class="masthead__title">Career Twin Finder</span>
+      </div>
+      <div class="masthead__meta">
+        <span class="mono">built on</span>
+        <a class="masthead__exa" href="https://exa.ai" target="_blank" rel="noopener">exa</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__eyebrow mono">No. 001 · A small experiment</div>
+      <h1 class="hero__title">
+        Find twenty engineers
+        <em>whose careers</em>
+        <br />
+        look like yours.
+      </h1>
+      <p class="hero__lede">
+        Paste a LinkedIn URL or your résumé. We use semantic search across
+        millions of professional profiles to surface humans on similar
+        trajectories — and tell you what each of them is doing now.
+      </p>
+    </section>
+
+    <section class="composer" id="composer">
+      <div class="composer__tabs" role="tablist">
+        <button class="tab tab--active" data-mode="url" role="tab">LinkedIn URL</button>
+        <button class="tab" data-mode="text" role="tab">Paste résumé</button>
+      </div>
+
+      <div class="composer__field" data-field="url">
+        <label class="mono label">profile url</label>
+        <input
+          type="url"
+          id="url-input"
+          placeholder="https://www.linkedin.com/in/your-handle/"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <div class="composer__field hidden" data-field="text">
+        <label class="mono label">résumé text</label>
+        <textarea
+          id="text-input"
+          rows="8"
+          placeholder="Paste plain text. Include current role, company, key skills, recent projects..."
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <div class="composer__controls">
+        <div class="composer__num">
+          <span class="mono label">how many</span>
+          <div class="num-toggle">
+            <button data-n="10">10</button>
+            <button data-n="20" class="num-toggle__active">20</button>
+            <button data-n="30">30</button>
+          </div>
+        </div>
+        <button class="cta" id="submit">
+          <span class="cta__label">Find my twins</span>
+          <span class="cta__arrow">→</span>
+        </button>
+      </div>
+
+      <div class="composer__error mono hidden" id="error"></div>
+    </section>
+
+    <section class="status hidden" id="status">
+      <div class="status__pulse"></div>
+      <div class="status__text mono">
+        <span id="status-text">searching the index…</span>
+      </div>
+    </section>
+
+    <section class="results hidden" id="results">
+      <div class="results__header">
+        <h2 class="results__title">Your twins</h2>
+        <div class="results__meta mono" id="results-meta"></div>
+      </div>
+      <ol class="twin-list" id="twin-list"></ol>
+    </section>
+
+    <section class="footnote">
+      <h3 class="footnote__title"><em>Notes</em> from the build</h3>
+      <ul class="footnote__list">
+        <li>
+          <span class="footnote__num mono">01</span>
+          <span>Uses Exa's <code>findSimilar</code> for URLs and semantic
+          <code>search</code> for résumé text. Both route to
+          <code>category="people"</code>.</span>
+        </li>
+        <li>
+          <span class="footnote__num mono">02</span>
+          <span>"Why this match" comes from Exa's <code>summary</code> parameter on
+          <code>/contents</code> — cheaper than a second LLM hop, and grounded
+          in the candidate's own page.</span>
+        </li>
+        <li>
+          <span class="footnote__num mono">03</span>
+          <span>Enrichment fans out across a thread pool of ten — one
+          <code>/contents</code> call per twin, all running in parallel.</span>
+        </li>
+        <li>
+          <span class="footnote__num mono">04</span>
+          <span>Results cache for seven days in a local JSON file so repeated demos
+          don't burn API credits.</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="colophon mono">
+    <div>
+      A demo by Catherine Wang ·
+      <a href="https://github.com" target="_blank" rel="noopener">github</a>
+    </div>
+    <div>v 0.1.0</div>
+  </footer>
+
+  <!-- Twin card template -->
+  <template id="twin-template">
+    <li class="twin">
+      <div class="twin__index mono"></div>
+      <div class="twin__body">
+        <div class="twin__head">
+          <h3 class="twin__name"></h3>
+          <div class="twin__role mono"></div>
+        </div>
+        <p class="twin__why"></p>
+        <div class="twin__highlights"></div>
+        <div class="twin__links mono">
+          <a class="twin__linkedin" target="_blank" rel="noopener">linkedin →</a>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

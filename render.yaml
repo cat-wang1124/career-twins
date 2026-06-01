@@ -1,0 +1,22 @@
+# Render.com deploy config.
+# Free tier: https://render.com (sleeps after 15 min of inactivity, fine for a demo)
+#
+# Setup:
+#   1. Push this repo to GitHub
+#   2. Create a new Web Service on render.com, point it at the repo
+#   3. Add EXA_API_KEY as an environment variable in the Render dashboard
+#   4. Deploy. Done.
+
+services:
+  - type: web
+    name: career-twins
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: EXA_API_KEY
+        sync: false  # set this manually in the Render dashboard
+      - key: PYTHON_VERSION
+        value: "3.11"
