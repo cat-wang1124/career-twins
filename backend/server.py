@@ -15,7 +15,11 @@ Then open http://localhost:8000
 from __future__ import annotations
 
 import logging
+import mimetypes
 from pathlib import Path
+
+mimetypes.add_type("text/css", ".css")
+mimetypes.add_type("application/javascript", ".js")
 
 from dotenv import load_dotenv
 load_dotenv()
